@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using SignalRChat.Hubs;
+using ParentalServer.Hubs;
 
 namespace ParentalServer.App
 {
@@ -27,13 +27,21 @@ namespace ParentalServer.App
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
 
+           services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:8080", "http://192.168.0.106:8080")
+                        .AllowCredentials();
+                });
+            });
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ParentalServer.App", Version = "v1" });
             });
-            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,12 +54,11 @@ namespace ParentalServer.App
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ParentalServer.App v1"));
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
+            app.UseCors();
 
-            app.UseAuthorization();
-
+            //app.UseAuthorization();
+    
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
