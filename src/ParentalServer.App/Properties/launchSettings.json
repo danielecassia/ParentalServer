@@ -5,6 +5,7 @@
 
     "ParentalServer.App": {
       "commandName": "Project",
+      "author": "Daniele Cássia",
       "dotnetRunMessages": "true",
       "launchBrowser": false,
       "launchUrl": "swagger",

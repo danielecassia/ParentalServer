@@ -33,7 +33,8 @@ namespace ParentalServer.App
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:8080", "http://192.168.0.106:8080")
+                    builder.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(o => true)
+                    //.WithOrigins("http://localhost:8080", "http://192.168.0.106:8080")
                         .AllowCredentials();
                 });
             });
